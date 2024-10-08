@@ -28,7 +28,7 @@ with st.form("Ticket"):
                            'Python', 'ML', 'Kaggle', 'Mini-Project',
                            'Pitch', 'Others')
                         , placeholder = 'ex. SQL')
-    description = st.text_input("Description", placeholder = 'ex. How to use window function with GWZ sales dataset? (Week2 Day5)')
+    description = st.text_input("Description", max_chars = 20, placeholder = 'ex. How to use window function with GWZ sales dataset? (Week2 Day5) - 20 chars max')
     time = st.time_input("Time?", value=datetime.datetime.now())
 
     # Form submit button
