@@ -1,6 +1,8 @@
 import streamlit as st
 import pandas as pd
 import datetime
+import requests
+import random
 
 # Initialize session state for the ticket_dict if it doesn't already exist
 if 'ticket_dict' not in st.session_state:
@@ -29,19 +31,33 @@ with st.form("Ticket"):
                            'Pitch', 'Others')
                         , placeholder = 'ex. SQL')
     description = st.text_input("Description", max_chars = 20, placeholder = 'ex. How to use window function with GWZ sales dataset? (Week2 Day5) - 20 chars max')
-    time = st.time_input("Time?", value=datetime.datetime.now())
 
     # Form submit button
     submitted = st.form_submit_button("Submit")
 
     if submitted:
-        st.warning('Your ticket is waiting to be assigned')
+        query = random.choice(['ticket','coding', 'waiting', 'cat'
+                               , 'smart', 'queue', 'funny cat',
+                               'funny dog', 'clever', 'genius'])
+
+        url = "https://api.giphy.com/v1/gifs/search"
+
+        params = {
+            "api_key" : st.secrets["api_key"], "q" : query, "limit" : 1}
+
+        response = requests.get(url, params=params)
+
+        gif_url = response.json()['data'][0]['embed_url']
+
+        st.markdown(f'<iframe src="{gif_url}" width="360" height="360" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/{query}">via GIPHY</a></p>', unsafe_allow_html=True)
+
+
         # Append submitted data to session state ticket_dict
         st.session_state.ticket_dict['Name'].append(name)
         st.session_state.ticket_dict['Batch'].append(batch)
         st.session_state.ticket_dict['Topic'].append(topic)
         st.session_state.ticket_dict['Description'].append(description)
-        st.session_state.ticket_dict['Time'].append(time.strftime("%H:%M"))
+        st.session_state.ticket_dict['Time'].append(datetime.datetime.now().strftime("%H:%M"))
         st.session_state.ticket_dict['Teacher'].append('')  # Placeholder for teacher
         st.session_state.ticket_dict['Solved?'].append(False)
 
