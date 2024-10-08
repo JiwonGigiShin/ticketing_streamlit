@@ -18,7 +18,10 @@ if 'ticket_dict' not in st.session_state:
 with st.form("Ticket"):
     st.header("Raise a Ticket🎫")
     name = st.text_input("Name", placeholder='ex. Jiwon Shin')
-    batch = st.selectbox("Batch", ('1792', '1793'), placeholder = "ex. 1792")
+    batch = st.radio(
+        "Batch",
+        key="visibility",
+        options=["1792", '1793']),
     topic = st.selectbox("Topic"
                         , ('Google Sheet', 'SQL',
                            'Looker Studio', 'PowerBI',
